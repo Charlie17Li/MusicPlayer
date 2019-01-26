@@ -10,6 +10,11 @@ public class SingleCycleMode implements PlayMode {
     }
 
     @Override
+    public void setSongNums(int songnums) {
+
+    }
+
+    @Override
     public int getPrevIndex() {
         return curIndex;
     }

@@ -1,11 +1,9 @@
 import Player_v0.PlayList;
+import Player_v0.PlayStatus;
 import Player_v0.Player;
 import Player_v0.SongInfo;
 
 public class MusicPlayer {
-    enum PlayStatus{        //播放状态;
-        PAUSE, PLAY, STOP
-    }
     private PlayList playList;      //播放列表
     private Player player;          //核心播放控制器
     private PlayStatus playStatus;
@@ -17,13 +15,24 @@ public class MusicPlayer {
     }
 
     public void onPlay(){   //暂停，继续;
+        playStatus = player.getStatus();
+        System.out.println("onPlay : " + playStatus);
         if(playStatus == PlayStatus.STOP){          //从播放列表头开始播放
             SongInfo curMusic = playList.getCurMusic();
-            player.onPlay(curMusic);
+            if(curMusic != null){
+                player.onPlay(curMusic);
+                playStatus = PlayStatus.PLAY;
+            }else{
+                System.out.println("出错!");
+            }
+
+
         }else if(playStatus == PlayStatus.PAUSE){   //暂停状态
             player.resumePlay();
+            playStatus = PlayStatus.PLAY;
         }else if(playStatus == PlayStatus.PLAY){    //播放状态
             player.pausePlay();
+            playStatus = PlayStatus.PAUSE;
         }
     }
 
@@ -53,6 +62,4 @@ public class MusicPlayer {
         }
 
     }
-
-
 }

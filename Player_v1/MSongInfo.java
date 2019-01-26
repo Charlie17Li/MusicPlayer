@@ -21,7 +21,9 @@ public class MSongInfo implements SongInfo {
         this.initMember(file);
 
         try {
+            System.out.println("文件位置：" + file.getAbsolutePath());
             inputStream = AudioSystem.getAudioInputStream(file);
+
         } catch (UnsupportedAudioFileException e) {
             e.printStackTrace();
         } catch (IOException e) {
@@ -53,13 +55,14 @@ public class MSongInfo implements SongInfo {
         //歌曲路径，歌曲名，歌手
         String fileName = file.getName();
         mSongPath = file.getAbsolutePath();
-        String pattern = "[\\u4e00-\\u9fa5A-Za-z0-9]+";     //匹配歌曲名和歌手
+        String pattern = "[\\u4e00-\\u9fa5A-Za-z0-9\\s]+";     //匹配歌曲名和歌手
         Pattern r = Pattern.compile(pattern);
         Matcher m = r.matcher(fileName);
 
         if(m.find()){
             mSongName = m.group(0);
-            mPlayer = m.group(1);
+            System.out.println(mSongName);
+            //mPlayer = m.group(1);
             if(mSongName == null || mPlayer == null)
                 System.out.println("正则表达式：可能有问题");
         }else{

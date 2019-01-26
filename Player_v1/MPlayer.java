@@ -1,5 +1,6 @@
 package Player_v1;
 
+import Player_v0.PlayStatus;
 import Player_v0.Player;
 import Player_v0.SongInfo;
 
@@ -7,9 +8,6 @@ import javax.sound.sampled.*;
 
 public class MPlayer implements Player {            //实现播放器 第一次尝试
 
-    enum PlayStatus{            //播放状态
-        STOP, PAUSE, PLAY
-    }
     private Thread playerThread;         //播放音乐的线程;
     private volatile PlayStatus playStatus = PlayStatus.STOP;           //可见性
     private volatile int curFrame;                   //当前帧
@@ -36,6 +34,7 @@ public class MPlayer implements Player {            //实现播放器 第一次�
     }
     private void init(SongInfo songInfo){
         audioInputStream = songInfo.getAudioStream();       //获取音频流
+        System.out.println("init 歌曲名：" + songInfo.getSongName());
         // 获得文件输入流的音频格式类对象
         audioFormat = audioInputStream.getFormat();
         // 转换mp3文件编码
@@ -85,6 +84,10 @@ public class MPlayer implements Player {            //实现播放器 第一次�
         }
     }
 
+    @Override
+    public Player_v0.PlayStatus getStatus() {
+        return playStatus;
+    }
 
 
     /**
@@ -100,7 +103,7 @@ public class MPlayer implements Player {            //实现播放器 第一次�
         }
         @Override
         public void run() {     //实现播放任务
-            int cnt;
+            int cnt = -1;
             byte tempBuffer[] = new byte[2048];
 
             playStatus = PlayStatus.PLAY;       //设置处于播放状态
@@ -108,7 +111,9 @@ public class MPlayer implements Player {            //实现播放器 第一次�
             try {
 
                 if(!sourceDataLine.isOpen()){           //打开输出设备
+                    System.out.println("打开输出设备");
                     sourceDataLine.open(audioFormat);
+                    sourceDataLine.start();
                 }
                 //先跳到指定的帧
                 for(int i = 0; i < tmpFrame; i++){
@@ -141,6 +146,11 @@ public class MPlayer implements Player {            //实现播放器 第一次�
             } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(0);
+            }
+            if(cnt == -1){
+                System.out.println("播放完毕!");
+                System.out.println("当前帧 : " + tmpFrame);
+                playStatus = PlayStatus.STOP;
             }
         }
     }//PlayRunnable

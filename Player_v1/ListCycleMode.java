@@ -9,6 +9,11 @@ public class ListCycleMode implements PlayMode {
     }
 
     @Override
+    public void setSongNums(int songnums) {
+        this.songNums = songnums;
+    }
+
+    @Override
     public int getPrevIndex() {
         return (--curIndex) % songNums;
     }

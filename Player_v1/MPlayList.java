@@ -43,7 +43,15 @@ public class MPlayList implements PlayList {
         this.curIndex = curIndex;
     }
 
+    @Override
     public void setPlayMode(PlayMode playMode){
         this.playMode = playMode;
+        this.playMode.setCurIndex(curIndex);            //当前索引
+        this.playMode.setSongNums(playList.size());     //总歌曲
+    }
+
+    @Override
+    public void setList(LinkedList<SongInfo> list) {
+        this.playList = list;
     }
 }

@@ -5,10 +5,17 @@ import java.util.Random;
 public class RandomMode implements PlayMode {
     private int curIndex;
     private int songNums;
+
     @Override
     public void setCurIndex(int curIndex) {
         this.curIndex = curIndex;
     }
+
+    @Override
+    public void setSongNums(int songnums) {
+        this.songNums = songnums;
+    }
+
 
     @Override
     public int getPrevIndex() {
